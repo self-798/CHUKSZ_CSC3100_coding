@@ -1,0 +1,125 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\title{Problem Solving Report}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+The problem at hand involves solving two distinct but related optimization challenges. The first problem (Q1) is about a warrior navigating through a tree structure while managing their magic and health points, and the second problem (Q2) involves selecting items from shelves in a supermarket to maximize the value of items that can be packed within a bag of limited size, while adhering to specific constraints. This report will explore different possible solutions for solving these problems, provide a detailed explanation of our approach, and evaluate why it stands out compared to other approaches.
+
+\section{Problem Q1: Warrior's Journey Through a Tree}
+
+\subsection{Possible Solutions for Q1}
+
+\begin{enumerate}
+    \item \textbf{Brute Force Search}
+    \begin{itemize}
+        \item \textbf{Description}: This solution involves enumerating all possible paths from the starting leaf node to the root of the tree and calculating the health and magic points needed for each path.
+        \item \textbf{Pros}: Guarantees an optimal solution as it evaluates all possible paths.
+        \item \textbf{Cons}: Computationally infeasible for larger trees due to the exponential number of paths that may exist, leading to high time complexity.
+    \end{itemize}
+
+    \item \textbf{Depth-First Search (DFS)}
+    \begin{itemize}
+        \item \textbf{Description}: The DFS approach is well-suited for tree traversal. Starting from each leaf node, the DFS keeps track of the current magic and health points, calculating the damage taken at each step. The goal is to ensure that both magic and health points are zero upon reaching the root.
+        \item \textbf{Pros}: DFS is efficient for traversing trees and allows for a recursive approach to calculate the necessary health points.
+        \item \textbf{Cons}: Implementing the calculation of health and magic points while avoiding revisiting nodes can be challenging in complex tree structures.
+    \end{itemize}
+
+    \item \textbf{Dynamic Programming on Trees}
+    \begin{itemize}
+        \item \textbf{Description}: Dynamic programming can be used in conjunction with DFS to store previously computed results for subtrees. This allows for optimal calculation of the minimum health points required to reach the root.
+        \item \textbf{Pros}: Ensures an optimal solution by avoiding redundant calculations.
+        \item \textbf{Cons}: Increased space complexity due to the need for storing intermediate results.
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Solution Description for Q1}
+The proposed solution for Q1 is implemented using a \textbf{Depth-First Search (DFS)} approach, which is particularly suitable for tree-based problems. The key steps are as follows:
+
+\begin{enumerate}
+    \item \textbf{Input Parsing}: The solution begins by parsing input values, including the number of nodes, edges, and the root node of the tree. Each edge includes the attack power of the monster on that edge.
+    \item \textbf{Tree Construction}: The tree is built using the input edges, represented as nodes with children and associated costs (attack powers). Each node maintains a list of its children and the cost to traverse to each child.
+    \item \textbf{DFS Traversal}: The DFS is used to traverse from each leaf node to the root, calculating the required health points. At each edge, the magic points are decremented, and the health points are updated based on the attack power and remaining magic points.
+    \item \textbf{Health Point Calculation}: The goal is to ensure that the health points are reduced to zero exactly when reaching the root. The DFS keeps track of the accumulated health points and updates the maximum health points required across all possible paths.
+\end{enumerate}
+
+\subsection{Why Our Solution for Q1 is Better}
+\begin{enumerate}
+    \item \textbf{Efficiency}: DFS allows us to efficiently explore each path from the leaf nodes to the root without redundancy.
+    \item \textbf{Handling Constraints}: By keeping track of the magic points and health points at each step, the solution ensures that the conditions of reaching the root with both values zero are met.
+    \item \textbf{Scalability}: The DFS approach scales well for moderate-sized trees, and optimizations such as pruning unnecessary branches help improve performance.
+\end{enumerate}
+
+\section{Problem Q2: Maximum Subinterval Sum with Unequal Shelf Contributions}
+
+\subsection{Possible Solutions for Q2}
+
+\begin{enumerate}
+    \item \textbf{Brute Force Search}
+    \begin{itemize}
+        \item \textbf{Description}: This solution involves enumerating all possible subsets of items from the given list and checking which subset yields the highest value, while adhering to the constraints of the maximum bag size and unequal contributions from each shelf.
+        \item \textbf{Pros}: Guarantees the optimal solution as every possible combination is evaluated.
+        \item \textbf{Cons}: Highly inefficient for larger datasets due to an exponential number of combinations, making it computationally infeasible for large inputs.
+    \end{itemize}
+
+    \item \textbf{Greedy Approach}
+    \begin{itemize}
+        \item \textbf{Description}: This solution sorts all items based on their values in descending order and picks the highest value items until the bag capacity is reached. The items are selected without considering the shelf continuity or unequal contribution constraints.
+        \item \textbf{Pros}: Fast and easy to implement, providing a quick estimate.
+        \item \textbf{Cons}: The greedy approach often overlooks important constraints between shelves, resulting in suboptimal or even invalid solutions.
+    \end{itemize}
+
+    \item \textbf{Sliding Window Technique (Proposed Solution)}
+    \begin{itemize}
+        \item \textbf{Description}: Our proposed solution utilizes a sliding window technique to evaluate possible item combinations while maintaining a balance between the continuity of shelves, the number of items allowed in the bag, and the maximum achievable value. The solution keeps track of items in a sliding window and adjusts the window's position to maximize the value, while ensuring that the number of items taken from each shelf is different.
+        \item \textbf{Pros}: Efficiently finds a high-value solution while ensuring compliance with all constraints. Optimizes value without the need for evaluating all possible combinations.
+        \item \textbf{Cons}: The sliding window approach may not always find the absolute optimal solution, but it strikes a good balance between optimality and computational efficiency.
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Solution Description for Q2}
+The proposed solution for Q2 is implemented using the sliding window technique, which is particularly well-suited for these types of optimization problems. The key steps involved are as follows:
+
+\begin{enumerate}
+    \item \textbf{Input Parsing}: The solution begins by parsing input values, including the number of items, shelves, and bag capacity. Each item is stored along with its ID and value.
+    \item \textbf{Organizing Items by Shelves}: Items are grouped by their respective shelves and sorted based on their shelf number and item ID. This organization helps ensure that items are considered in an order that respects shelf continuity and enables us to apply the sliding window technique effectively.
+    \item \textbf{Sliding Window Implementation}: The sliding window technique is used to traverse through the items, maintaining a window that contains a set of items meeting the bag capacity constraint and shelf continuity condition. The approach also ensures that the number of items taken from each shelf is different. If the conditions are violated, the window is adjusted by removing items from the left, and the maximum value found during valid configurations is updated.
+    \item \textbf{Optimization}: The algorithm keeps track of the number of items from each shelf, ensuring that each shelf contributes items without exceeding the continuity and unequal contribution constraints. This approach ensures that items are selected efficiently while meeting all specified constraints.
+\end{enumerate}
+
+\subsection{Why Our Solution for Q2 is Better}
+\begin{enumerate}
+    \item \textbf{Efficiency}: Unlike the brute force approach, which involves evaluating all possible combinations, the sliding window technique focuses only on feasible windows of items. This significantly reduces the time complexity and makes the solution practical for larger inputs.
+    \item \textbf{Handling Constraints}: Unlike the greedy approach, which may neglect the continuity of shelves or unequal contributions, the sliding window approach is designed to ensure that items are selected in a way that maintains both continuity and unequal contributions from shelves. This is particularly important for scenarios where gaps between shelves or equal shelf contributions would lead to suboptimal or invalid solutions.
+    \item \textbf{Scalability}: The sliding window provides a more scalable solution that does not require excessive memory or state management compared to dynamic programming.
+    \item \textbf{Simplicity of Implementation}: The sliding window approach is conceptually straightforward and easier to implement compared to dynamic programming. It allows for a more readable and maintainable codebase while achieving a high level of efficiency.
+\end{enumerate}
+
+\section{Conclusion}
+In conclusion, the DFS approach for Q1 and the sliding window approach for Q2 offer efficient and practical solutions for the given optimization problems. The proposed methods effectively balance computational efficiency, scalability, and adherence to constraints, making them superior to brute force, greedy, and dynamic programming alternatives for these particular problems. The clear structure and adaptability of these techniques make them suitable solutions, allowing us to achieve high-value results within reasonable computational limits.
+
+\section{Future Improvements}
+Possible future improvements to these solutions include:
+
+\begin{enumerate}
+    \item \textbf{Heuristic Enhancements}: Incorporating heuristics to better prioritize shelves or nodes with high-value items.
+    \item \textbf{Parallel Processing}: Leveraging parallel processing techniques to evaluate multiple windows or paths simultaneously, potentially improving runtime performance.
+    \item \textbf{Hybrid Approaches}: Combining elements of dynamic programming with DFS or sliding window techniques to further refine the solution and explore additional configurations.
+\end{enumerate}
+
+\section{References}
+\begin{itemize}
+    \item Introduction to Algorithms, Cormen et al.
+    \item Depth-First Search and Applications
+    \item Sliding Window Algorithms: Patterns and Applications
+    \item Dynamic Programming Principles and Practices
+\end{itemize}
+
+\end{document}
